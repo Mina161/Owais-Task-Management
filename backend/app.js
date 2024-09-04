@@ -7,7 +7,8 @@ const moment = require('moment');
 
 require("dotenv").config();
 
-const router = require("./routes");
+const authRouter = require("./routes/authRouter");
+const tasksRouter = require("./routes/tasksRouter");
 
 var app = express();
 
@@ -22,7 +23,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
 
-app.use("/API", router);
+app.use("/API/auth", authRouter);
+app.use("/API/tasks", tasksRouter);
 
 // error handler
 app.use(function (err, req, res, next) {

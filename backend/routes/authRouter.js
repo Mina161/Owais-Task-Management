@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const jwt = require("jsonwebtoken");
-const { createUserWithEmailAndPassword, signInWithEmailAndPassword, deleteUser, sendEmailVerification, signOut, updateProfile } = require("firebase/auth");
+const { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } = require("firebase/auth");
 const { auth } = require("../config/firebase");
-const { verifyPatient } = require("../auth/jwt-auth");
-const { createDocument, getDocumentWithId, createDocumentWithId } = require('../controllers/documentController');
+const { getDocumentWithId, createDocumentWithId } = require('../controllers/documentController');
 
 // Authentication
 router.post("/login", async (req, res) => {

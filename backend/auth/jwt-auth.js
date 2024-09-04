@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { getDocumentWithId } = require("../controllers/documentController");
+const { getDocumentWithId, getDocumentReference } = require("../controllers/documentController");
 
 function isAuthenticated(req, res, next) {
     try{
@@ -11,6 +11,7 @@ function isAuthenticated(req, res, next) {
                     throw Error(err)
                 }
                 req.requesterId = decoded
+                req.userRef = getDocumentReference("users", decoded)
                 req.user = await getDocumentWithId("users", decoded)
                 if (req.requesterId !== undefined) {
                     next()
