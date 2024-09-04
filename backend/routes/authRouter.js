@@ -4,10 +4,15 @@ const jwt = require("jsonwebtoken");
 const { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } = require("firebase/auth");
 const { auth } = require("../config/firebase");
 const { getDocumentWithId, createDocumentWithId } = require('../controllers/documentController');
+const { loginSchema, signupSchema } = require('../schemas/authSchemas');
 
 // Authentication
 router.post("/login", async (req, res) => {
     try {
+        const { error, value } = loginSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
         const { email, password } = req.body
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
         const user = await getDocumentWithId("users", userCredential.user.uid)
@@ -34,6 +39,10 @@ router.post("/login", async (req, res) => {
 
 router.post("/signup", async (req, res) => {
     try {
+        const { error, value } = signupSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
         const { email, name, password } = req.body
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });

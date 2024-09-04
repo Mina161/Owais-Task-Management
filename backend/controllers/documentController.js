@@ -9,7 +9,7 @@ function getDocumentReference(document, id) {
 async function getDocumentWithId(document, id) {
   const docRef = getDocumentReference(document, id);
   const docSnap = await getDoc(docRef);
-  return {id: docSnap.id, ...docSnap.data()};
+  return {id: docSnap.id, ...docSnap.data(), exists: docSnap.exists()};
 }
 
 async function createDocumentWithId(document, data, id) {
