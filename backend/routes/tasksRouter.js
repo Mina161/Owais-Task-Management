@@ -5,7 +5,7 @@ const { isAuthenticated } = require("../auth/jwt-auth");
 const { createDocument, getDocumentWithId, createDocumentWithId, updateDocument, deleteDocument } = require('../controllers/documentController');
 const { generateFuzzyArray } = require('../controllers/fuzzyController');
 const { getMediaURL, deleteMediaObject } = require('../controllers/storageController');
-const { or, query, where, collection, getDocs, and, orderBy } = require('firebase/firestore');
+const { Filter } = require('firebase-admin/firestore');
 const { createTaskSchema, getTasksSchema, updateTaskSchema, deleteTaskSchema } = require('../schemas/taskSchemas');
 
 // Tasks CRUD
@@ -45,7 +45,7 @@ router.get("/", isAuthenticated, async (req, res) => {
         }
         const { searchTerm, status, priority, id } = req.query
         const data = [];
-        let queries = [where("user", "==", req.userRef)];
+        let query = firestore.collection("tasks").where("user", "==", req.userRef);
 
         if (id) {
             const task = await getDocumentWithId("tasks", id);
@@ -59,18 +59,21 @@ router.get("/", isAuthenticated, async (req, res) => {
         }
 
         if (searchTerm) {
-            queries.push(or(where("titleFuzzy", "array-contains", searchTerm.toLowerCase()), where("descriptionFuzzy", "array-contains", searchTerm.toLowerCase())));
+            query = query.where(Filter.or(
+                Filter.where("titleFuzzy", "array-contains", searchTerm.toLowerCase()),
+                Filter.where("descriptionFuzzy", "array-contains", searchTerm.toLowerCase()),
+            ))
         }
 
         if (status) {
-            queries.push(where("status", "==", status));
+            query = query.where("status", "==", status);
         }
 
         if (priority) {
-            queries.push(where("priority", "==", priorityMap({priorityString: priority})));
+            query = query.where("priority", "==", priorityMap({priorityString: priority}));
         }
 
-        const querySnapshot = await getDocs(query(collection(firestore, "tasks"), and(...queries), orderBy("priority", "desc")));
+        const querySnapshot = await query.orderBy("priority", "desc").get();
 
         querySnapshot.forEach(async (doc) => {
             const docData = doc.data()
