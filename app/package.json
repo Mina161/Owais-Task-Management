@@ -40,6 +40,7 @@
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
+    "firebase": "^10.13.1",
     "fix": "^0.0.6",
     "moment": "^2.29.4",
     "nativewind": "^2.0.11",

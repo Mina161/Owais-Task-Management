@@ -35,6 +35,8 @@ import { getTasks } from "../../app/store/actions/dataActions";
 import moment from "moment";
 import DangerButton from "../../app/components/DangerButton";
 import { TaskManipulationModal } from "../../app/components/SnackBar";
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 
 export const Task = ({ route, getTasks, task, isLoading }) => {
   const navigation = useNavigation();
@@ -44,6 +46,22 @@ export const Task = ({ route, getTasks, task, isLoading }) => {
   useEffect(() => {
     getTasks({ id: taskId })
   }, [taskId])
+
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*', multiple: true });
+      if (!result.canceled) {
+        const fileBlobs = await Promise.all(result.assets.map(async (asset) => {
+          const fileAsString = await FileSystem.readAsStringAsync(asset.uri);
+          const blob = new Blob([fileAsString], { type: asset.mimeType });
+          return {name: asset.name, mimeType: asset.mimeType, blob: blob};
+        }))
+        console.log('Files picked: ', fileBlobs);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Page appBar={<AppBar navigation={navigation} title={"Task Details"} />}>
@@ -77,6 +95,7 @@ export const Task = ({ route, getTasks, task, isLoading }) => {
             </View>
           </Card.Content>
         </Card>
+        <PrimaryButton text={"Pick Documents"} onPress={pickDocument}/>
         <TaskManipulationModal visible={visible} onDismiss={() => setVisible(false)} />
       </View>}
       {isLoading && <ActivityIndicator size={50} />}
