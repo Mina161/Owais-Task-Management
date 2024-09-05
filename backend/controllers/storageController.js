@@ -1,5 +1,5 @@
 const { ref, getDownloadURL, deleteObject } = require("firebase/storage");
-const { storage } = require("../config/firebase");
+const { storage } = require("../config/firebase-admin");
 
 async function getMediaURL(media) {
     const mediaRef = ref(storage, media);

@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "login": "auth/login",
+        "signup": "auth/signup"
+    },
+    "tasks": {
+        "root": "tasks/"
+    }
+}

@@ -16,7 +16,6 @@ router.post("/login", async (req, res) => {
         const { email, password } = req.body
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
         const user = await getDocumentWithId("users", userCredential.user.uid)
-        console.log(user)
         if (user) {
             jwt.sign(
                 user.id,
@@ -26,7 +25,7 @@ router.post("/login", async (req, res) => {
                     if (err) {
                         throw Error(err)
                     }
-                    return res.status(200).json({ message: "Success", payload: user, token: `Bearer ${token}` })
+                    return res.status(200).json({ message: `Welcome back ${user.name}`, payload: user, token: `Bearer ${token}` })
                 }
             )
         } else {
@@ -50,7 +49,23 @@ router.post("/signup", async (req, res) => {
             name,
             email
         }, userCredential.user.uid);
-        return res.status(201).json({ message: `Welcome ${name}` });
+
+        const user = await getDocumentWithId("users", userCredential.user.uid)
+        if (user) {
+            jwt.sign(
+                user.id,
+                process.env.JWT_SECRET,
+                //{expiresIn: 86400},
+                (err, token) => {
+                    if (err) {
+                        throw Error(err)
+                    }
+                    return res.status(200).json({ message: `Welcome ${name}`, payload: user, token: `Bearer ${token}` })
+                }
+            )
+        } else {
+            return res.status(400).json({ message: "Invalid email or password" })
+        }
     } catch (err) {
         return res.status(400).json({ message: err.message })
     }

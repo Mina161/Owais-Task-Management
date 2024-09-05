@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { auth, firestore } = require("../config/firebase");
+const { auth, firestore } = require("../config/firebase-admin");
 const { isAuthenticated } = require("../auth/jwt-auth");
 const { createDocument, getDocumentWithId, createDocumentWithId, updateDocument, deleteDocument } = require('../controllers/documentController');
 const { generateFuzzyArray } = require('../controllers/fuzzyController');

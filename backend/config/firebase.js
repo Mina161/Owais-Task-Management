@@ -1,21 +1,16 @@
 const { initializeApp } = require("firebase/app");
 const { getAuth } = require("firebase/auth");
-const { getFirestore } = require("firebase/firestore");
-const { getStorage } = require("firebase/storage");
 
 const firebaseConfig = {
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId
+  apiKey: "AIzaSyDZt2jQlWW5ZWt-bUpJYHzAM45qqf8_5I0",
+  authDomain: "mk-todo-list-owais.firebaseapp.com",
+  projectId: "mk-todo-list-owais",
+  storageBucket: "mk-todo-list-owais.appspot.com",
+  messagingSenderId: "750020160908",
+  appId: "1:750020160908:web:9cd295cc374d21f56a3aa9"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const firestore = getFirestore(app);
-const storage = getStorage();
+const auth = getAuth(app)
 
-module.exports = { firestore, auth, storage };
+module.exports = { auth }

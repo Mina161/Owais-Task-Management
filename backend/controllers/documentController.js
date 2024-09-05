@@ -1,46 +1,45 @@
-const { getDoc, setDoc, addDoc, collection, serverTimestamp, doc, updateDoc, deleteDoc } = require("firebase/firestore");
-const { firestore } = require("../config/firebase");
+const { firestore } = require("../config/firebase-admin");
 
-function getDocumentReference(document, id) {
-  const docRef = doc(firestore, document, id);
+function getDocumentReference(collection, id) {
+  const docRef = firestore.collection(collection).doc(id);
   return docRef;
 }
 
-async function getDocumentWithId(document, id) {
-  const docRef = getDocumentReference(document, id);
-  const docSnap = await getDoc(docRef);
-  return {id: docSnap.id, ...docSnap.data(), exists: docSnap.exists()};
+async function getDocumentWithId(collection, id) {
+  const docRef = getDocumentReference(collection, id);
+  const docSnap = await docRef.get();
+  return {id: docSnap.id, ...docSnap.data(), exists: docSnap.exists};
 }
 
-async function createDocumentWithId(document, data, id) {
-  const newDoc = await setDoc(doc(firestore, document, id), {
+async function createDocumentWithId(collection, data, id) {
+  const newDoc = await firestore.collection(collection).doc(id).set({
     ...data,
     updatedAt: serverTimestamp(),
     createdAt: serverTimestamp()
-  });
+  })
   return newDoc;
 }
 
-async function createDocument(document, data) {
-  const newDoc = await addDoc(collection(firestore, document), {
+async function createDocument(collection, data) {
+  const newDoc = await firestore.collection(collection).add({
     ...data,
     updatedAt: serverTimestamp(),
     createdAt: serverTimestamp()
-  });
+  })
   return newDoc;
 }
 
-async function updateDocument(document, data, id) {
-  const docRef = getDocumentReference(document, id);
-  return await updateDoc(docRef, {
+async function updateDocument(collection, data, id) {
+  const docRef = getDocumentReference(collection, id);
+  return await docRef.set({
     ...data,
     updatedAt: serverTimestamp()
   });
 }
 
-async function deleteDocument(document, id) {
-  const docRef = getDocumentReference(document, id);
-  return await deleteDoc(docRef);
+async function deleteDocument(collection, id) {
+  const docRef = getDocumentReference(collection, id);
+  return await docRef.delete();
 }
 
 module.exports = { getDocumentWithId, createDocument, createDocumentWithId, getDocumentReference, updateDocument, deleteDocument };
