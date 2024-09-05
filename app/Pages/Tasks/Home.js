@@ -55,7 +55,7 @@ export const TasksHome = ({ user, getTasks, tasks, logout, isLoading }) => {
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder={"Search Tasks"} onSearch={onSearch} />
       <View>
         {!isLoading && tasks && tasks.length > 0 && tasks.map((task) => {
-          return <TaskCard task={task} />
+          return <TaskCard key={task.id} task={task} />
         })}
         {isLoading && <ActivityIndicator size={50} />}
       </View>

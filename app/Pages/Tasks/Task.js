@@ -2,41 +2,28 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { View, Platform, Image, Dimensions } from "react-native";
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 import {
-  Button,
   Text,
-  Appbar,
-  TextInput,
   ActivityIndicator,
-  Avatar,
   Card,
   IconButton,
-  Modal,
-  Portal,
   Chip,
   Icon
 } from "react-native-paper";
 import {
-  Input,
   PrimaryButton,
   Page,
-  globalStyles,
-  SecondaryButton,
   AppBar,
-  LoaderPage,
-  Dialog,
-  SearchBar
 } from "../../app/components";
 import { logout } from "../../app/store/actions/authActions";
 import { getTasks } from "../../app/store/actions/dataActions";
 import moment from "moment";
 import DangerButton from "../../app/components/DangerButton";
-import { TaskManipulationModal } from "../../app/components/SnackBar";
+import { TaskManipulationModal } from "../../app/components/TaskManipulationModal";
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { uploadFile } from "../../app/config/firebase";
 
 export const Task = ({ route, getTasks, task, isLoading }) => {
   const navigation = useNavigation();
@@ -47,19 +34,43 @@ export const Task = ({ route, getTasks, task, isLoading }) => {
     getTasks({ id: taskId })
   }, [taskId])
 
+  const getBlobFromUri = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+  
+    return blob;
+  };
+
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({ type: '*/*', multiple: true });
       if (!result.canceled) {
-        const fileBlobs = await Promise.all(result.assets.map(async (asset) => {
-          const fileAsString = await FileSystem.readAsStringAsync(asset.uri);
-          const blob = new Blob([fileAsString], { type: asset.mimeType });
-          return {name: asset.name, mimeType: asset.mimeType, blob: blob};
+        const files = await Promise.all(result.assets.map(async (asset) => {
+          console.log(asset)
+          if (asset.file) {
+            return { name: asset.name, mimeType: asset.mimeType, file: asset.file }
+          }
+          const response = await fetch(asset.uri);
+          const blob = await response.blob();
+          return { name: asset.name, mimeType: asset.mimeType, file: blob };
         }))
-        console.log('Files picked: ', fileBlobs);
+        const uploadedFiles = await Promise.all(files.map(async (file) => {
+          return await uploadFile(file, "attachments/")
+        }))
+        console.log('Files uploaded: ', uploadedFiles);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -95,7 +106,7 @@ export const Task = ({ route, getTasks, task, isLoading }) => {
             </View>
           </Card.Content>
         </Card>
-        <PrimaryButton text={"Pick Documents"} onPress={pickDocument}/>
+        <PrimaryButton text={"Pick Documents"} onPress={pickDocument} />
         <TaskManipulationModal visible={visible} onDismiss={() => setVisible(false)} />
       </View>}
       {isLoading && <ActivityIndicator size={50} />}

@@ -33,6 +33,7 @@
         }
       ],
       "expo-font",
+      "expo-file-system",
       "expo-document-picker"
     ],
     "extra": {

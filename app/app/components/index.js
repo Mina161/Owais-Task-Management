@@ -6,7 +6,7 @@ import PrimaryButton from "./PrimaryButton"
 import SecondaryButton from "./SecondaryButton"
 import SearchBar from "./SearchBar"
 import Dialog from "./Dialog"
-import SnackBar  from "./SnackBar"
+import SnackBar  from "./TaskManipulationModal"
 import globalStyles from "./Styles"
 import theme from "./Theme"
 
