@@ -87,12 +87,14 @@ export const Login = ({ logIn, isLoading, authErrorMessage, isError }) => {
             label="Email Address"
             placeholder="email@email.com"
             inputMode="email"
+            icon={"email"}
             value={email}
             onChangeText={(text) => setFormData({ ...formData, email: text })}
           />
           <Input
             label="Password"
             placeholder="Password"
+            icon={"lock"}
             value={password}
             secureTextEntry
             onChangeText={(text) =>
@@ -103,12 +105,9 @@ export const Login = ({ logIn, isLoading, authErrorMessage, isError }) => {
         <View style={{ ...globalStyles.container, marginTop: 20 }}>
           <PrimaryButton fullWidth onPress={handleSubmit} text={isLoading ? <ActivityIndicator color="white" /> : "Login"} />
         </View>
-        <View style={{ display: "flex", justifyContent: "center", flexDirection: "row", marginTop: 20 }}>
+        <View style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
           <Text>
-            Don't have an account?
-          </Text>
-          <Text onPress={() => navigation.navigate("Register")} style={{ color: "#D49600", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: 10 }}>
-            Sign Up
+            Don't have an account? <Text onPress={() => navigation.navigate("Register")} style={{ color: "#D49600"}}> Sign Up</Text>
           </Text>
         </View>
       </View>

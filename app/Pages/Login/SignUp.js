@@ -10,7 +10,8 @@ import {
   Text,
   Appbar,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
+  Checkbox
 } from "react-native-paper";
 import {
   Input,
@@ -30,10 +31,11 @@ export const Register = ({ signUp, isLoading, authErrorMessage, isError }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
+    checked: false
   });
 
-  const { email, password, name } = formData;
+  const { email, password, name, checked } = formData;
 
   const handleSubmit = () => {
     if (!email || !password || !name) {
@@ -41,6 +43,12 @@ export const Register = ({ signUp, isLoading, authErrorMessage, isError }) => {
       setDialogData({
         title: "Invalid Submission",
         subTitle: "Kindly fill all required fields",
+      })
+    } else if (!checked) {
+      setDialogeVisible(true)
+      setDialogData({
+        title: "Invalid Submission",
+        subTitle: "Kindly read and agree to Owitasks Privacy Policy and Terms & Conditions",
       })
     } else {
       signUp({ email, password, name });
@@ -84,38 +92,50 @@ export const Register = ({ signUp, isLoading, authErrorMessage, isError }) => {
           Create your account!
         </Text>
         <View style={{ marginTop: 20 }}>
-        <Input
+          <Input
             label="Full name"
             placeholder="John Doe"
-            value={email}
+            icon={"account"}
+            value={name}
             onChangeText={(text) => setFormData({ ...formData, name: text })}
           />
           <Input
             label="Email Address"
             placeholder="email@email.com"
             inputMode="email"
+            icon={"email"}
             value={email}
             onChangeText={(text) => setFormData({ ...formData, email: text })}
           />
           <Input
             label="Password"
             placeholder="Password"
+            icon={"lock"}
             value={password}
             secureTextEntry
             onChangeText={(text) =>
               setFormData({ ...formData, password: text })
             }
           />
+          <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: 20 }}>
+            <Checkbox
+              status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setFormData({ ...formData, checked: !checked });
+              }}
+            />
+            <Text>
+              I have read and agreed to OwiTasks <Text style={{color: "#D49600"}}>Privacy Policy, Terms & Conditions</Text>
+            </Text>
+          </View>
+
         </View>
         <View style={{ ...globalStyles.container, marginTop: 20 }}>
           <PrimaryButton fullWidth onPress={handleSubmit} text={isLoading ? <ActivityIndicator color="white" /> : "Sign Up"} />
         </View>
-        <View style={{ display: "flex", justifyContent: "center", flexDirection: "row", marginTop: 20 }}>
+        <View style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
           <Text>
-            Already have an account?
-          </Text>
-          <Text onPress={() => navigation.navigate("Login")} style={{ color: "#D49600", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: 10 }}>
-            Log In
+            Already have an account? <Text onPress={() => navigation.navigate("Login")} style={{ color: "#D49600"}}> Log In</Text>
           </Text>
         </View>
       </View>

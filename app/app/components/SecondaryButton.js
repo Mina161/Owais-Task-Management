@@ -11,8 +11,8 @@ import globalStyles from "./Styles";
 export const SecondaryButton = ({ text, onPress, disabled, style, icon, smallFactor, fullWidth }) => {
 
   return (
-    <Button mode="text" icon={icon} style={{...globalStyles.button, marginVertical: smallFactor ? 0 : null, width: smallFactor ? "" : fullWidth ? "100%" : "50%", ...style}} labelStyle={{ margin: smallFactor ? 0 : 10, fontSize: 16 }} textColor="#202B30" onPress={onPress} disabled={disabled}>
-      <Text variant="medium" style={{color: "#202B30"}}>{text}</Text>
+    <Button mode="text" icon={icon} style={{ ...globalStyles.button, marginVertical: smallFactor ? 0 : null, width: smallFactor ? "" : fullWidth ? "100%" : "50%", ...style }} labelStyle={{ margin: smallFactor ? 0 : 10, fontSize: 16 }} onPress={onPress} disabled={disabled}>
+      <Text variant="medium" style={{ color: "#202B30" }}>{text}</Text>
     </Button>
   );
 };

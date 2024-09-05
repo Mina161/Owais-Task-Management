@@ -1,2 +1,3 @@
 import TasksHome from "./Home";
-export { TasksHome };
+import Task from "./Task";
+export { TasksHome, Task };

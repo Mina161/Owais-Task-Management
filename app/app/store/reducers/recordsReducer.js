@@ -3,6 +3,7 @@ import { FETCH_RECORDS, FETCH_RECORDS_SUCCESS, FETCH_RECORDS_FAIL } from "../act
 const initialState = {
     isLoading: false,
     isError: false,
+    errorMessage: null
 };
 
 export default function store(state = initialState, action) {
@@ -13,6 +14,8 @@ export default function store(state = initialState, action) {
             return {
                 ...state,
                 isLoading: true,
+                isError: false,
+                errorMessage: null
             };
         case FETCH_RECORDS_SUCCESS:
             return {
@@ -20,12 +23,14 @@ export default function store(state = initialState, action) {
                 ...payload,
                 isLoading: false,
                 isError: false,
+                errorMessage: null
             };
         case FETCH_RECORDS_FAIL:
             return {
                 ...state,
                 isLoading: false,
                 isError: true,
+                errorMessage: payload
             };
         default:
             return state;

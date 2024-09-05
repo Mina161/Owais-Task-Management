@@ -40,7 +40,8 @@ export const signUp = (data) => async (dispatch) => {
       .catch((err) => {
         console.log(err);
         return dispatch({
-          type: LOGIN_FAIL,
+          type: LOGIN_FAIL, 
+          payload: err.response.data.message
         });
       });
   } catch (error) {
@@ -66,7 +67,8 @@ export const logIn = (data) => async (dispatch) => {
       .catch((err) => {
         console.log(err);
         return dispatch({
-          type: LOGIN_FAIL,
+          type: LOGIN_FAIL, 
+          payload: err.response.data.message
         });
       });
   } catch (error) {

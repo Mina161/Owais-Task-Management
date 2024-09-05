@@ -7,25 +7,29 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-reanimated-carousel";
+import Input from "./Input";
 
-export const Searchbar = ({ onSearch, placeholder, searchValue, setSearchValue }) => {
+export const Searchbar = ({ onSearch, placeholder, searchTerm, setSearchTerm }) => {
   const navigation = useNavigation();
   const width = Dimensions.get("window").width;
 
   return (
-      <View style={{display: "flex", flexDirection:"row", justifyContent: "space-between", backgroundColor: "#E5F8FF", alignItems: "center", borderRadius: 250, padding: 5}}>
-        {/* <Avatar.Icon style={{backgroundColor: "#E5F8FF"}} size={25} icon="sticker-emoji"/> */}
-        <TextInput
-          mode="outlined"
-          placeholder={placeholder}
-          value={searchValue}
-          activeOutlineColor="#E5F8FF"
-          outlineColor="#E5F8FF"
-          style={{backgroundColor: "#E5F8FF", marginLeft: 10, borderRadius: 50, width: width*0.7}}
-          onChangeText={(text) => setSearchValue(text)}
-        />
-        <IconButton onPress={onSearch} icon="magnify" />
-      </View>
+    <View style={{ borderRadius: 250, padding: 5 }}>
+      <Input
+        placeholder={placeholder}
+        icon={"magnify"}
+        iconOnPress={onSearch}
+        value={searchTerm}
+        fullWidth
+        onChangeText={(text) =>
+          setSearchTerm(text)
+        }
+        style={{ marginVertical: 10, borderRadius: 250 }}
+        outlineStyle={{ borderRadius: 250 }}
+        returnKeyType={"search"}
+        onSubmitEditing={onSearch}
+      />
+    </View>
   );
 };
 
