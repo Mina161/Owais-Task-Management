@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const authRouter = require("./routes/authRouter");
 const tasksRouter = require("./routes/tasksRouter");
+const { encryptFile } = require("./controllers/encryptionController");
 
 var app = express();
 

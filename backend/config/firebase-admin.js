@@ -1,5 +1,6 @@
 var admin = require("firebase-admin");
-var serviceAccount = require("../firebaseServiceKey.json");
+const { decryptFile } = require("../controllers/encryptionController");
+var serviceAccount = decryptFile()
 
 const app = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
