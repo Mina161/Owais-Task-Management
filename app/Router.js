@@ -18,7 +18,6 @@ export const Router = ({ user, loadUser }) => {
 
     useEffect(() => {
         loadUser({})
-        schedulePushNotification({ title: "Welcome to Owitasks" })
     }, [])
 
     useEffect(() => {

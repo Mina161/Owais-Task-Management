@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8000/api";
+const baseURL = "https://owitasks-api.vercel.app/api";
 
 const postRequest = async (body, query, params, token, endPoint) => {
   return await axios.post(

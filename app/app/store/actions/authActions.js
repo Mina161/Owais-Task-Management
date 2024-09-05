@@ -12,7 +12,8 @@ export const loadUser = () => async (dispatch) => {
     user = JSON.parse(user);
     return dispatch({
       type: LOGIN_SUCCESS,
-      payload: { user, token }
+      payload: user,
+      token: token
     });
   } else {
     return dispatch({
@@ -53,7 +54,7 @@ export const logIn = (data) => async (dispatch) => {
     postRequest(data, undefined, undefined, undefined, endpoints.auth.login)
       .then((response) => {
         const { data, status } = response;
-        if(status === 201) {
+        if(status === 200) {
           schedulePushNotification({ title: data.message })
         }
         return dispatch({
@@ -71,4 +72,8 @@ export const logIn = (data) => async (dispatch) => {
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, payload: error.message });
   }
+};
+
+export const logout = () => async (dispatch) => {
+  return dispatch({ type: LOGOUT_SUCCESS });
 };

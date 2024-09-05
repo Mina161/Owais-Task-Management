@@ -26,6 +26,7 @@ export default function store(state = initialState, action) {
       return {
         ...state,
         user: payload,
+        token: token,
         isLoading: false,
         isError: false,
         errorMessage: null,
