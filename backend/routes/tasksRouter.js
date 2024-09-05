@@ -55,7 +55,7 @@ router.get("/", isAuthenticated, async (req, res) => {
             const taskAttachments = await Promise.all(task.attachments.map(async (attachment) => {
                 return await getMediaURL(attachment);
             }))
-            return dispatch({ type: FETCH_RECORDS_SUCCESS, payload: { task: projectTask({ task, taskAttachments }) } });
+            return res.status(200).json({ task: projectTask({ task, taskAttachments }) });
         }
 
         if (searchTerm) {
