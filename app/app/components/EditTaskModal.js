@@ -25,7 +25,6 @@ export const EditTaskModal = ({ visible, onDismiss, reload, setReload, isLoading
   const [description, setDescription] = useState(null);
   const [priority, setPriority] = useState(null);
   const [status, setStatus] = useState(null);
-  const [reminder, setReminder] = useState(0);
   const [dueDate, setDueDate] = useState(null);
   const [uploading, setUploading] = useState(false);
 
@@ -102,24 +101,16 @@ export const EditTaskModal = ({ visible, onDismiss, reload, setReload, isLoading
         status,
         attachments: uploadedAttachments,
       }
-      if (reminder > 0) {
-        const notficationData = {
-          title: "Deadline Approaching",
-          body: `Deadline for "${title}" is in ${reminder} day${reminder === 1 ? "" : "s"}`,
-          date: new Date(moment(dueDate).subtract(reminder, "days").add(10, "hours"))
-        }
-        schedulePushNotification(notficationData)
-      }
       editTask(formData);
       setSubmitted(true);
     }
   }
 
   useEffect(() => {
-    if (message) {
+    if (message && !isLoading) {
       setDialogData({
         title: message,
-        subTitle: reminder ? `You will be reminded ${reminder} day${reminder === 1 ? "" : "s"} before the due date` : "",
+        subTitle: "",
       })
       if (submitted) {
         setDialogVisible(true);
@@ -214,7 +205,7 @@ export const EditTaskModal = ({ visible, onDismiss, reload, setReload, isLoading
 
 const mapStateToProps = (state) => ({
   task: state?.records?.task,
-  isLoading: state?.wait?.isLoading || state?.records?.isLoading,
+  isLoading: state?.wait?.isLoading,
   isError: state?.wait?.isError,
   message: state?.wait?.data,
 });

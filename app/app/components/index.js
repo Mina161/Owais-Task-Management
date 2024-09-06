@@ -6,8 +6,8 @@ import PrimaryButton from "./PrimaryButton"
 import SecondaryButton from "./SecondaryButton"
 import SearchBar from "./SearchBar"
 import Dialog from "./Dialog"
-import SnackBar  from "./TaskManipulationModal"
+import TaskManipulationModal  from "./TaskManipulationModal"
 import globalStyles from "./Styles"
 import theme from "./Theme"
 
-export { Page, AppBar, Input, PrimaryButton, SecondaryButton, Dropdown, SearchBar, Dialog, SnackBar, theme, globalStyles }
+export { Page, AppBar, Input, PrimaryButton, SecondaryButton, Dropdown, SearchBar, Dialog, TaskManipulationModal, theme, globalStyles }

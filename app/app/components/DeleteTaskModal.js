@@ -18,7 +18,6 @@ import Dialog from "./Dialog";
 import { deleteTask, editTask, getTasks } from "../store/actions/dataActions";
 import { schedulePushNotification } from "./Notifications";
 import moment from "moment";
-import { Task } from "../../Pages";
 import TaskView from "./TaskView";
 
 export const DeleteTaskModal = ({ visible, onDismiss, reload, setReload, isLoading, message, taskId, getTasks, task, deleteTask, onSubmit }) => {
@@ -73,7 +72,7 @@ export const DeleteTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
             <ScrollView>
               <Text style={{ color: "#FF4C23", fontSize: 18, marginBottom: 5 }}>Delete Task</Text>
               <Text variant="medium" style={{ fontSize: 24, marginBottom: 10 }}>Are you sure you want to delete the task?</Text>
-              <TaskView />
+              <TaskView task={task}/>
               <DangerButton style={{ marginBottom: 10 }} text={"Confirm"} fullWidth onPress={handleSubmit} />
               <PrimaryButton text={"Cancel"} fullWidth onPress={() => onDismiss()} />
             </ScrollView>
@@ -86,7 +85,7 @@ export const DeleteTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
 
 const mapStateToProps = (state) => ({
   task: state?.records?.task,
-  isLoading: state?.wait?.isLoading || state?.records?.isLoading,
+  isLoading: state?.wait?.isLoading,
   isError: state?.wait?.isError,
   message: state?.wait?.data,
 });

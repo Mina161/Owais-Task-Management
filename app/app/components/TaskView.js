@@ -3,28 +3,9 @@ import { connect } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { View, Dimensions, Platform, ScrollView, Image, KeyboardAvoidingView } from "react-native";
 import { Text, Card, Chip, Icon, IconButton } from "react-native-paper";
-import { deleteTask, editTask, getTasks } from "../store/actions/dataActions";
 import moment from "moment";
-import EditTaskModal from "./EditTaskModal";
-import DeleteTaskModal from "./DeleteTaskModal";
-import TaskManipulationModal from "./TaskManipulationModal";
-import { useNavigation } from "@react-navigation/native";
 
-export const TaskView = ({ task, reload, setReload, onTaskDelete, navigation }) => {
-  const [visible, setVisible] = React.useState(false);
-  const [editTaskModalVisible, setEditTaskModalVisible] = React.useState(false);
-  const [deleteTaskModalVisible, setDeleteTaskModalVisible] = React.useState(false);
-  
-  const onEdit = () => {
-    setEditTaskModalVisible(true);
-    setVisible(false);
-  }
-
-  const onDelete = () => {
-    setDeleteTaskModalVisible(true);
-    setVisible(false);
-  }
-
+export const TaskView = ({ task, setVisible, navigation }) => {
   return (
     <View>
       <Card mode="outlined" style={{ width: "100%", marginVertical: 10, borderColor: "#E0E0E0" }}>
@@ -66,11 +47,6 @@ export const TaskView = ({ task, reload, setReload, onTaskDelete, navigation }) 
           })}
         </View>
       </View>
-      {onTaskDelete !== undefined && <>
-        <TaskManipulationModal visible={visible} onDismiss={() => setVisible(false)} onEdit={onEdit} onDelete={onDelete} />
-        <EditTaskModal visible={editTaskModalVisible} onDismiss={() => setEditTaskModalVisible(false)} taskId={task?.id} reload={reload} setReload={setReload} />
-        <DeleteTaskModal visible={deleteTaskModalVisible} onDismiss={() => setDeleteTaskModalVisible(false)} taskId={task?.id} onSubmit={onTaskDelete} />
-      </>}
     </View>
   );
 };
@@ -82,6 +58,6 @@ const mapStateToProps = (state) => ({
   message: state?.wait?.data,
 });
 
-const mapDispatchToProps = { editTask, getTasks };
+const mapDispatchToProps = { };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskView);

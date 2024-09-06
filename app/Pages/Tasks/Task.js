@@ -26,21 +26,39 @@ import { TaskManipulationModal } from "../../app/components/TaskManipulationModa
 import { schedulePushNotification } from "../../app/components/Notifications";
 import TaskView from "../../app/components/TaskView";
 import { LoaderPortal } from "../../app/components/LoaderPortal";
+import EditTaskModal from "../../app/components/EditTaskModal";
+import DeleteTaskModal from "../../app/components/DeleteTaskModal";
 
 export const Task = ({ route, getTasks, task, isLoading }) => {
   const navigation = useNavigation();
   const { taskId } = route.params;
   const [reload, setReload] = useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [editTaskModalVisible, setEditTaskModalVisible] = React.useState(false);
+  const [deleteTaskModalVisible, setDeleteTaskModalVisible] = React.useState(false);
   
+  const onEdit = () => {
+    setEditTaskModalVisible(true);
+    setVisible(false);
+  }
+
+  const onDelete = () => {
+    setDeleteTaskModalVisible(true);
+    setVisible(false);
+  }
+
   useEffect(() => {
     getTasks({ id: taskId })
-    schedulePushNotification({ title: "Testing" })
+    console.log(reload)
   }, [taskId, reload])
 
   return (
     <Page appBar={<AppBar navigation={navigation} title={"Task Details"} />}>
-      {task && <TaskView task={task} reload={reload} setReload={setReload} onTaskDelete={() => navigation.goBack()} navigation={navigation} />}
+      {task && <TaskView task={task} reload={reload} setReload={setReload} navigation={navigation} setVisible={setVisible} />}
       {isLoading && <LoaderPortal />}
+      <TaskManipulationModal visible={visible} onDismiss={() => setVisible(false)} onEdit={onEdit} onDelete={onDelete} />
+      <EditTaskModal visible={editTaskModalVisible} onDismiss={() => setEditTaskModalVisible(false)} taskId={task?.id} reload={reload} setReload={setReload} />
+      <DeleteTaskModal visible={deleteTaskModalVisible} onDismiss={() => setDeleteTaskModalVisible(false)} taskId={task?.id} onSubmit={() => navigation.goBack()} />
     </Page>
   );
 };

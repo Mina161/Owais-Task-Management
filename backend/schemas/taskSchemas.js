@@ -5,7 +5,7 @@ const createTaskSchema = Joi.object({
     description: Joi.string().required(),
     dueDate: Joi.date().required(),
     priority: Joi.string().valid('Low', 'Medium', 'High').required(),
-    attachments: Joi.array().items(Joi.string()).optional()
+    attachments: Joi.array().items(Joi.string().uri()).optional()
 });
 
 const getTasksSchema = Joi.object({
@@ -21,7 +21,7 @@ const updateTaskSchema = Joi.object({
     description: Joi.string().optional(),
     status: Joi.string().valid('New', 'In Progress', 'Completed').optional(),
     priority: Joi.string().valid('Low', 'Medium', 'High').optional(),
-    attachments: Joi.array().items(Joi.string()).optional()
+    attachments: Joi.array().items(Joi.string().uri()).optional()
 });
 
 const deleteTaskSchema = Joi.object({

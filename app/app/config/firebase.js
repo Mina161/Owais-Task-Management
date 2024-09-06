@@ -1,6 +1,6 @@
 import 'react-native-get-random-values';
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuid } from 'uuid';
 
 const firebaseConfig = {
@@ -22,7 +22,7 @@ const uploadFile = async (file, location) => {
   const locationRef = ref(storage, `${location}/${filename}`)
   await uploadBytes(locationRef, file.file, { contentType: file.mimeType })
   const reference = `${location}/${filename}`
-  return reference;
+  return await getDownloadURL(reference);
 }
 
 export { uploadFile }
