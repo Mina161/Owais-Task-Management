@@ -67,4 +67,4 @@ To run the backend server locally:
 3. Start the server.
     ```bash npm run dev```
 
-The server will be running on `http://localhost:8000`.
+The server will be running on `http://localhost:8000`
