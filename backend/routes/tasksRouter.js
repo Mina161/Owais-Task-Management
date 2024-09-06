@@ -104,13 +104,12 @@ router.put("/", isAuthenticated, async (req, res) => {
         if(!req.userRef.isEqual(task.user)){
             throw Error("Task unaccessible")
         }
-        
+
         const deletedAttachments = task.attachments?.filter((attachment) => !attachments.includes(attachment)) || []
         await Promise.all(deletedAttachments.map(async (attachment) => { return await deleteMediaObject(attachment) }))
 
         await updateDocument("tasks", {
-            user: task.user,
-            createdAt: task.createdAt,
+            ...task,
             ...(title ? { title, titleFuzzy: generateFuzzyArray(title) } : {}),
             ...(description ? { description, descriptionFuzzy: generateFuzzyArray(description) } : {}),
             ...(status ? { status } : {}),
