@@ -19,7 +19,7 @@ const globalStyles = StyleSheet.create({
     button: {
         marginVertical: 10,
         padding: 10,
-        borderRadius: 5
+        borderRadius: 15
     },
     buttonText: {
         color: 'white',

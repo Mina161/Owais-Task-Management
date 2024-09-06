@@ -16,6 +16,7 @@ export const Searchbar = ({ onSearch, placeholder, searchTerm, setSearchTerm }) 
   return (
     <View style={{ borderRadius: 250, padding: 5 }}>
       <Input
+        label={""}
         placeholder={placeholder}
         icon={"magnify"}
         iconOnPress={onSearch}

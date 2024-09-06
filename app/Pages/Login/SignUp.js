@@ -117,8 +117,8 @@ export const Register = ({ signUp, isLoading, authErrorMessage, isError }) => {
               setFormData({ ...formData, password: text })
             }
           />
-          <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: 20 }}>
-            <Checkbox
+          <View style={{ display: "flex", flexDirection: "row", alignItems: "center", width: "90%", marginTop: 20 }}>
+            <Checkbox.Android
               status={checked ? 'checked' : 'unchecked'}
               onPress={() => {
                 setFormData({ ...formData, checked: !checked });
@@ -128,7 +128,6 @@ export const Register = ({ signUp, isLoading, authErrorMessage, isError }) => {
               I have read and agreed to OwiTasks <Text style={{color: "#D49600"}}>Privacy Policy, Terms & Conditions</Text>
             </Text>
           </View>
-
         </View>
         <View style={{ ...globalStyles.container, marginTop: 20 }}>
           <PrimaryButton fullWidth onPress={handleSubmit} text={isLoading ? <ActivityIndicator color="white" /> : "Sign Up"} />

@@ -12,7 +12,7 @@ export const WebViewPage = ({ route }) => {
 
   return (
     <>
-      <AppBar navigation={navigation} title={title} action={<Appbar.Action color="white" icon="web" onPress={() => Linking.openURL(url)} />}/>
+      <AppBar navigation={navigation} title={"Attachment"} action={<Appbar.Action color="#1E5154" icon="web" onPress={() => Linking.openURL(url)} />}/>
       <SafeAreaView style={{ flex: 1 }}>
         {Platform.OS !== "web" && <WebView style={{ flex: 1 }} source={{ uri: url }}/>}
         {Platform.OS === "web" && <iframe style={{ flex: 1 }} src={url}/>}

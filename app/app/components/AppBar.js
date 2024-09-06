@@ -5,7 +5,7 @@ const AppBar = ({ title, navigation, action, noBack }) => {
   return (
     <Appbar.Header style={{ backgroundColor: "#FFFFFF" }}>
       {!noBack && <Appbar.BackAction color='#1E5154' onPress={() => navigation.goBack()} />}
-      <Text variant='bold' style={{ fontSize: 18, color: "#1E5154" }}>{title}</Text>
+      <Appbar.Content titleStyle={{fontFamily: "Montserrat-Medium"}} color='#1E5154' title={title} />
       {action}
     </Appbar.Header>
   );

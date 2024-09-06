@@ -9,12 +9,12 @@ import { TextInput } from "react-native-paper";
 import globalStyles from "./Styles";
 import DropDown from "react-native-paper-dropdown";
 
-export const Dropdown = ({ label, placeholder, multiSelect, value, setValue, list, readOnly }) => {
+export const Dropdown = ({ label, placeholder, multiSelect, value, setValue, list, readOnly, required }) => {
   const [showDropDown, setShowDropDown] = useState(false);
 
   return (
     <DropDown
-      label={label}
+      label={`${label}${required ? "*":""}`}
       mode="outlined"
       visible={showDropDown}
       placeholder={placeholder}
@@ -24,9 +24,12 @@ export const Dropdown = ({ label, placeholder, multiSelect, value, setValue, lis
       value={value}
       setValue={setValue}
       list={list}
-      activeColor="#1E5154"
+      activeColor="#E0E0E0"
+      style={{ ...globalStyles.input }}
       inputProps={{
         right: <TextInput.Icon icon="menu-down" />,
+        style: { ...globalStyles.input },
+        outlineColor: "#E0E0E0",
         disabled: readOnly,
         editable: !readOnly
       }}

@@ -9,7 +9,7 @@ export async function schedulePushNotification({title, body, data, date}) {
         body,
         data,
       },
-      trigger: date ? { date } : { seconds: 1 },
+      trigger: date ? { date } : { seconds: 3 },
     });
   }
 

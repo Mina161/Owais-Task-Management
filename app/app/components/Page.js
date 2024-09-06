@@ -11,7 +11,7 @@ export const Page = ({
     <>
       {appBar}
       <ScrollView style={{ backgroundColor: "white" }}>
-        <View style={{ padding: 10, backgroundColor: "white" }}>
+        <View style={{ padding: 15, backgroundColor: "white" }}>
           {children}
         </View>
       </ScrollView>

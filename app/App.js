@@ -4,8 +4,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
 import Router from "./Router";
 import { schedulePushNotification } from "./app/components/Notifications";
+import { en, registerTranslation } from 'react-native-paper-dates'
 
+registerTranslation('en', en);
 SplashScreen.preventAutoHideAsync();
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,

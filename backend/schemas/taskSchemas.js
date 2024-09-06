@@ -21,7 +21,7 @@ const updateTaskSchema = Joi.object({
     description: Joi.string().optional(),
     status: Joi.string().valid('New', 'In Progress', 'Completed').optional(),
     priority: Joi.string().valid('Low', 'Medium', 'High').optional(),
-    attachments: Joi.array().items(Joi.string().uri()).optional()
+    attachments: Joi.array().items(Joi.string()).optional()
 });
 
 const deleteTaskSchema = Joi.object({

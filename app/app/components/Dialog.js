@@ -11,8 +11,6 @@ import SecondaryButton from "./SecondaryButton";
 const Text = customText("bold");
 
 export const Dialog = ({ open, onDismiss, title, description, action1Text, action2Text, action1Icon, action2Icon, action1, action2 }) => {
-  const navigation = useNavigation();
-  const width = Dimensions.get("window").width;
   const containerStyle = { backgroundColor: '#E5F8FF', padding: 30, margin: 30, borderRadius: 20 };
 
   return (

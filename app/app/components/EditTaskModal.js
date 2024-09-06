@@ -15,18 +15,36 @@ import PrimaryButton from "./PrimaryButton";
 import * as DocumentPicker from 'expo-document-picker';
 import { uploadFile } from "../config/firebase";
 import Dialog from "./Dialog";
-import { createTask } from "../store/actions/dataActions";
+import { editTask, getTasks } from "../store/actions/dataActions";
 import { schedulePushNotification } from "./Notifications";
 import moment from "moment";
 
-export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoading, message, createTask }) => {
+export const EditTaskModal = ({ visible, onDismiss, reload, setReload, isLoading, message, taskId, task, getTasks, editTask }) => {
   const [attachments, setAttachments] = useState([]);
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
   const [priority, setPriority] = useState(null);
+  const [status, setStatus] = useState(null);
   const [reminder, setReminder] = useState(0);
   const [dueDate, setDueDate] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    if (visible) {
+      getTasks({ id: taskId })
+    }
+  }, [visible, taskId])
+
+  useEffect(() => {
+    if (task && task.id === taskId) {
+      setAttachments(task.attachments || [])
+      setTitle(task.title)
+      setDescription(task.description)
+      setPriority(task.priority)
+      setStatus(task.status)
+      setDueDate(new Date(task.dueDate))
+    }
+  }, [task])
 
   const pickAttachments = async () => {
     try {
@@ -70,14 +88,18 @@ export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
     } else {
       setUploading(true);
       const uploadedAttachments = await Promise.all(attachments.map(async (attachment) => {
+        if (typeof attachment === "string") {
+          return attachment
+        }
         return await uploadFile(attachment, "attachments")
       }))
       setUploading(false);
       const formData = {
+        id: taskId,
         title,
         description,
         priority,
-        dueDate,
+        status,
         attachments: uploadedAttachments,
       }
       if (reminder > 0) {
@@ -88,7 +110,7 @@ export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
         }
         schedulePushNotification(notficationData)
       }
-      createTask(formData);
+      editTask(formData);
       setSubmitted(true);
     }
   }
@@ -123,7 +145,7 @@ export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
         <Card style={{ marginHorizontal: "5%", backgroundColor: "white" }}>
           <Card.Content>
             <ScrollView>
-              <Text variant="medium" style={{ color: "#D49600", fontSize: 24, marginBottom: 10 }}>Add New Task</Text>
+              <Text variant="medium" style={{ color: "#7E92A2", fontSize: 24, marginBottom: 10 }}>Edit Task</Text>
               <Input
                 label="Task Title"
                 placeholder="Enter task title"
@@ -149,6 +171,17 @@ export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
                 value={priority}
                 setValue={(text) => setPriority(text)}
               />
+              <Dropdown
+                label={"Status"}
+                required
+                list={[
+                  { label: "New", value: "New" },
+                  { label: "In Progress", value: "In Progress" },
+                  { label: "Completed", value: "Completed" },
+                ]}
+                value={status}
+                setValue={(text) => setStatus(text)}
+              />
               <Input
                 label="Task Due Date"
                 placeholder="Enter task due date"
@@ -156,25 +189,15 @@ export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
                 value={dueDate}
                 inputMode={"date"}
                 onChangeText={(text) => setDueDate(text)}
-              />
-
-              <Dropdown
-                label={"Remind me"}
-                required
-                list={[
-                  { label: "A week before", value: 7 },
-                  { label: "2 days before", value: 2 },
-                  { label: "A day before", value: 1 },
-                  { label: "Never", value: 0 },
-                ]}
-                value={reminder}
-                setValue={(text) => setReminder(text)}
+                readOnly
               />
               <View style={{ borderColor: "#E0E0E0", borderWidth: 1, borderStyle: Platform.OS === "ios" ? "solid" : "dashed", borderRadius: 10, padding: 10, marginVertical: 10 }}>
                 <Text>{attachments.length} Attachment{attachments.length === 1 ? "" : "s"}</Text>
                 <View style={{ fex: 1, justifyContent: "center", flexDirection: "row", flexWrap: "wrap", marginTop: 5 }}>
                   {attachments.map((attachment, idx) => {
-                    return <Chip key={idx} closeIcon={"close"} textStyle={{ flex: 1, textAlign: "center" }} style={{ width: "45%", marginEnd: 5, marginTop: 5, backgroundColor: "#D49600", }} onClose={() => removeAttachment(idx)}>{attachment.name}</Chip>
+                    return <Chip key={idx} closeIcon={"close"} textStyle={{ flex: 1, textAlign: "center" }} style={{ width: "45%", marginEnd: 5, marginTop: 5, backgroundColor: "#D49600", }} onClose={() => removeAttachment(idx)}>
+                      {attachment.name || attachment.split("_").slice(1).join(" ")}
+                    </Chip>
                   })}
                 </View>
                 <SecondaryButton text={"Add Attachments"} fullWidth onPress={pickAttachments} />
@@ -190,11 +213,12 @@ export const CreateTaskModal = ({ visible, onDismiss, reload, setReload, isLoadi
 };
 
 const mapStateToProps = (state) => ({
-  isLoading: state?.wait?.isLoading,
+  task: state?.records?.task,
+  isLoading: state?.wait?.isLoading || state?.records?.isLoading,
   isError: state?.wait?.isError,
   message: state?.wait?.data,
 });
 
-const mapDispatchToProps = { createTask };
+const mapDispatchToProps = { editTask, getTasks };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateTaskModal);
+export default connect(mapStateToProps, mapDispatchToProps)(EditTaskModal);
