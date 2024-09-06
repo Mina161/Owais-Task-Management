@@ -1,5 +1,5 @@
 const { firestore } = require("../config/firebase-admin");
-const { serverTimestamp } = require("firebase/firestore")
+const { Timestamp } = require("firebase-admin/firestore")
 
 function getDocumentReference(collection, id) {
   const docRef = firestore.collection(collection).doc(id);
@@ -15,8 +15,8 @@ async function getDocumentWithId(collection, id) {
 async function createDocumentWithId(collection, data, id) {
   const newDoc = await firestore.collection(collection).doc(id).set({
     ...data,
-    updatedAt: serverTimestamp(),
-    createdAt: serverTimestamp()
+    updatedAt: new Timestamp(),
+    createdAt: new Timestamp()
   })
   return newDoc;
 }
@@ -24,8 +24,8 @@ async function createDocumentWithId(collection, data, id) {
 async function createDocument(collection, data) {
   const newDoc = await firestore.collection(collection).add({
     ...data,
-    updatedAt: serverTimestamp(),
-    createdAt: serverTimestamp()
+    updatedAt: new Timestamp(),
+    createdAt: new Timestamp()
   })
   return newDoc;
 }
@@ -34,7 +34,7 @@ async function updateDocument(collection, data, id) {
   const docRef = getDocumentReference(collection, id);
   return await docRef.set({
     ...data,
-    updatedAt: serverTimestamp()
+    updatedAt: new Timestamp()
   });
 }
 
