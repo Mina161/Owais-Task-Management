@@ -7,15 +7,15 @@ import AppBar from "./AppBar";
 import { Appbar } from "react-native-paper";
 
 export const WebViewPage = ({ route }) => {
-  const { url, title } = route.params;
+  const { url } = route.params;
   const navigation = useNavigation();
 
   return (
     <>
-      <AppBar navigation={navigation} title={"Attachment"} action={<Appbar.Action color="#1E5154" icon="web" onPress={() => Linking.openURL(url)} />}/>
+      <AppBar navigation={navigation} title={"Attachment"} action={<Appbar.Action color="#1E5154" icon="web" onPress={() => Linking.openURL(url)} />} />
       <SafeAreaView style={{ flex: 1 }}>
-        {Platform.OS !== "web" && <WebView style={{ flex: 1 }} source={{ uri: url }}/>}
-        {Platform.OS === "web" && <iframe style={{ flex: 1 }} src={url}/>}
+        {Platform.OS !== "web" && <WebView style={{ flex: 1 }} source={{ uri: url }} />}
+        {Platform.OS === "web" && <iframe style={{ flex: 1 }} src={url} />}
       </SafeAreaView>
     </>
   );

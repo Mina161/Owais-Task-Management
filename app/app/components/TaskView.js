@@ -4,8 +4,15 @@ import { useState, useEffect, useRef } from "react";
 import { View, Dimensions, Platform, ScrollView, Image, KeyboardAvoidingView } from "react-native";
 import { Text, Card, Chip, Icon, IconButton } from "react-native-paper";
 import moment from "moment";
+import { getFileLink } from "../config/firebase";
 
 export const TaskView = ({ task, setVisible, navigation }) => {
+
+  const openAttachment = async (attachment) => {
+    const url = await getFileLink(attachment);
+    navigation.navigate("Attachment", { url })
+  }
+
   return (
     <View>
       <Card mode="outlined" style={{ width: "100%", marginVertical: 10, borderColor: "#E0E0E0" }}>
@@ -41,7 +48,7 @@ export const TaskView = ({ task, setVisible, navigation }) => {
         <Text>{task?.attachments.length} Attachment{task?.attachments.length === 1 ? "" : "s"}</Text>
         <View style={{ fex: 1, justifyContent: "center", flexDirection: "row", flexWrap: "wrap", marginTop: 5 }}>
           {task?.attachments.map((attachment, idx) => {
-            return <Chip onPress={navigation ? () => navigation.navigate("Attachment", { url: attachment }) : null} key={idx} textStyle={{ flex: 1, textAlign: "center" }} style={{ width: "45%", marginEnd: 5, marginTop: 5, backgroundColor: "#D49600", }}>
+            return <Chip onPress={navigation ? () => openAttachment(attachment) : null} key={idx} textStyle={{ flex: 1, textAlign: "center" }} style={{ width: "45%", marginEnd: 5, marginTop: 5, backgroundColor: "#D49600", }}>
               {attachment.split("_").slice(1).join(" ")}
             </Chip>
           })}

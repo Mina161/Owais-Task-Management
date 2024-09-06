@@ -21,8 +21,12 @@ const uploadFile = async (file, location) => {
   const filename = `${filePrefix}_${fixedFilename}`
   const locationRef = ref(storage, `${location}/${filename}`)
   await uploadBytes(locationRef, file.file, { contentType: file.mimeType })
-  const reference = `${location}/${filename}`
-  return await getDownloadURL(reference);
+  return `${location}/${filename}`;
 }
 
-export { uploadFile }
+const getFileLink = async (location) => {
+  const locationRef = ref(storage, location);
+  return await getDownloadURL(locationRef);
+}
+
+export { uploadFile, getFileLink }
