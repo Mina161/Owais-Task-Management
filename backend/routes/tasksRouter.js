@@ -55,10 +55,7 @@ router.get("/", isAuthenticated, async (req, res) => {
             if(!req.userRef.isEqual(task.user)){
                 throw Error("Task unaccessible")
             }
-            const taskAttachments = await Promise.all(task.attachments.map(async (attachment) => {
-                return await getMediaURL(attachment);
-            }))
-            return res.status(200).json({ task: projectTask({ task, taskAttachments }) });
+            return res.status(200).json({ task: projectTask({ task }) });
         }
 
         if (searchTerm) {
@@ -85,6 +82,7 @@ router.get("/", isAuthenticated, async (req, res) => {
 
         return res.status(200).json({ tasks: data });
     } catch (err) {
+        console.error(err)
         return res.status(400).json({ message: err.message })
     }
 })
@@ -108,6 +106,9 @@ router.put("/", isAuthenticated, async (req, res) => {
         const deletedAttachments = task.attachments?.filter((attachment) => !attachments.includes(attachment)) || []
         await Promise.all(deletedAttachments.map(async (attachment) => { return await deleteMediaObject(attachment) }))
 
+        delete task.id
+        delete task.exists
+        
         await updateDocument("tasks", {
             ...task,
             ...(title ? { title, titleFuzzy: generateFuzzyArray(title) } : {}),
@@ -119,7 +120,6 @@ router.put("/", isAuthenticated, async (req, res) => {
 
         return res.status(200).json({ message: `Task updated` });
     } catch (err) {
-        console.error(err)
         return res.status(400).json({ message: err.message })
     }
 })
@@ -165,7 +165,7 @@ function priorityMap({ priorityNum, priorityString }) {
     }
 }
 
-function projectTask({ task, taskAttachments }) {
+function projectTask({ task }) {
     return {
         id: task.id,
         title: task.title,
@@ -173,7 +173,7 @@ function projectTask({ task, taskAttachments }) {
         dueDate: new Date(task.dueDate.seconds * 1000),
         priority: priorityMap({priorityNum: task.priority}),
         status: task.status,
-        ...(taskAttachments ? { attachments: taskAttachments } : {}),
+        ...(task.attachments ? { attachments: task.attachments } : {}),
         createdAt: new Date(task.createdAt.seconds * 1000),
         updatedAt: new Date(task.updatedAt.seconds * 1000),
     }
