@@ -27,11 +27,17 @@ The app is developed using the Expo Managed Workflow, making it easy to start, r
 To start the app:
 
 1. Navigate to the `app` directory.
-    ```bash cd app```
+    ```bash
+    > cd app
+    ```
 2. Install dependencies.
-    ```bash npm install```
+    ```bash
+    > npm install
+    ```
 3. Start the Expo server (Expo Go).
-    ```bash npm start```
+    ```bash
+    > npm start
+    ```
 
 ### Building the App
 
@@ -61,10 +67,16 @@ The backend API is hosted and synced automatically with every commit on Vercel a
 To run the backend server locally:
 
 1. Navigate to the `backend` directory.
-    ```bash cd backend```
+    ```bash
+    > cd backend
+    ```
 2. Install dependencies.
-    ```bash npm install```
+    ```bash
+    > npm install
+    ```
 3. Start the server.
-    ```bash npm run dev```
+    ```bash
+    > npm run dev
+    ```
 
 The server will be running on `http://localhost:8000`
