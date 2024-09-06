@@ -27,11 +27,11 @@ The app is developed using the Expo Managed Workflow, making it easy to start, r
 To start the app:
 
 1. Navigate to the `app` directory.
-    ```cd app```
+    ```bash cd app```
 2. Install dependencies.
-    ```npm install```
+    ```bash npm install```
 3. Start the Expo server (Expo Go).
-    ```npm start```
+    ```bash npm start```
 
 ### Building the App
 
@@ -44,7 +44,7 @@ For more details on building with EAS, refer to the [Expo documentation](https:/
 
 ## Backend (Node.js + Firebase)
 
-The backend is built using Node.js with Express and Firebase as the database and authentication provider.
+The backend is built using Node.js with Express and Firebase as the database and authentication provider. All secrets are stored in the `.env` and managed by Dotenv Vault
 
 ### Tech Stack
 
@@ -61,10 +61,10 @@ The backend API is hosted and synced automatically with every commit on Vercel a
 To run the backend server locally:
 
 1. Navigate to the `backend` directory.
-    ```cd backend```
+    ```bash cd backend```
 2. Install dependencies.
-    ```npm install```
+    ```bash npm install```
 3. Start the server.
-    ```npm run dev```
+    ```bash npm run dev```
 
 The server will be running on `http://localhost:8000`.
