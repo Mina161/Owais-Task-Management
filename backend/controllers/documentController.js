@@ -1,4 +1,5 @@
 const { firestore } = require("../config/firebase-admin");
+const { serverTimestamp } = require("firebase/firestore")
 
 function getDocumentReference(collection, id) {
   const docRef = firestore.collection(collection).doc(id);
