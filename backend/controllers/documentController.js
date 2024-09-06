@@ -15,8 +15,8 @@ async function getDocumentWithId(collection, id) {
 async function createDocumentWithId(collection, data, id) {
   const newDoc = await firestore.collection(collection).doc(id).set({
     ...data,
-    updatedAt: new Timestamp(new Date().getSeconds(), new Date().getMilliseconds()),
-    createdAt: new Timestamp(new Date().getSeconds(), new Date().getMilliseconds())
+    updatedAt: new Timestamp.now(),
+    createdAt: new Timestamp.now()
   })
   return newDoc;
 }
@@ -24,8 +24,8 @@ async function createDocumentWithId(collection, data, id) {
 async function createDocument(collection, data) {
   const newDoc = await firestore.collection(collection).add({
     ...data,
-    updatedAt: new Timestamp(new Date().getSeconds(), new Date().getMilliseconds()),
-    createdAt: new Timestamp(new Date().getSeconds(), new Date().getMilliseconds())
+    updatedAt: new Timestamp.now(),
+    createdAt: new Timestamp.now()
   })
   return newDoc;
 }
@@ -34,7 +34,7 @@ async function updateDocument(collection, data, id) {
   const docRef = getDocumentReference(collection, id);
   return await docRef.set({
     ...data,
-    updatedAt: new Timestamp(new Date().getSeconds(), new Date().getMilliseconds())
+    updatedAt: new Timestamp.now()
   });
 }
 
