@@ -52,6 +52,9 @@ router.get("/", isAuthenticated, async (req, res) => {
             if(!task.exists){
                 throw Error("Task not found")
             }
+            if(!req.userRef.isEqual(task.user)){
+                throw Error("Task unaccessible")
+            }
             const taskAttachments = await Promise.all(task.attachments.map(async (attachment) => {
                 return await getMediaURL(attachment);
             }))
@@ -98,15 +101,16 @@ router.put("/", isAuthenticated, async (req, res) => {
         if(!task.exists){
             throw Error("Task not found")
         }
-        if(task.user.isEqual(req.userRef)){
+        if(!req.userRef.isEqual(task.user)){
             throw Error("Task unaccessible")
         }
-        const deletedAttachments = task.attachments.filter((attachment) => !attachments.includes(attachment))
+        
+        const deletedAttachments = task.attachments?.filter((attachment) => !attachments.includes(attachment)) || []
         await Promise.all(deletedAttachments.map(async (attachment) => { return await deleteMediaObject(attachment) }))
 
         await updateDocument("tasks", {
             user: task.user,
-            createdAt: task.user.createdAt,
+            createdAt: task.createdAt,
             ...(title ? { title, titleFuzzy: generateFuzzyArray(title) } : {}),
             ...(description ? { description, descriptionFuzzy: generateFuzzyArray(description) } : {}),
             ...(status ? { status } : {}),
@@ -114,12 +118,9 @@ router.put("/", isAuthenticated, async (req, res) => {
             ...(attachments ? { attachments } : {}),
         }, id);
 
-        const updatedTask = await getDocumentWithId("tasks", id);
-        const taskAttachments = await Promise.all(task.attachments.map(async (attachment) => {
-            return await getMediaURL(attachment);
-        }))
-        return res.status(200).json({ message: `Task updated`, task: projectTask({ task: updatedTask, taskAttachments }) });
+        return res.status(200).json({ message: `Task updated` });
     } catch (err) {
+        console.error(err)
         return res.status(400).json({ message: err.message })
     }
 })
@@ -135,7 +136,7 @@ router.delete("/", isAuthenticated, async (req, res) => {
         if(!task.exists){
             throw Error("Task not found")
         }
-        if(task.user.isEqual(req.userRef)){
+        if(!req.userRef.isEqual(task.user)){
             throw Error("Task unaccessible")
         }
         await Promise.all(task.attachments.map(async (attachment) => { return await deleteMediaObject(attachment) }))
