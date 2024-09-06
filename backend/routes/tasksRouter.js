@@ -94,10 +94,11 @@ router.put("/", isAuthenticated, async (req, res) => {
         }
         const { id, title, description, status, priority, attachments } = req.body
         const task = await getDocumentWithId("tasks", id);
+        
         if(!task.exists){
             throw Error("Task not found")
         }
-        if(task.user !== req.userRef){
+        if(task.user.isEqual(req.userRef)){
             throw Error("Task unaccessible")
         }
         const deletedAttachments = task.attachments.filter((attachment) => !attachments.includes(attachment))
@@ -134,7 +135,7 @@ router.delete("/", isAuthenticated, async (req, res) => {
         if(!task.exists){
             throw Error("Task not found")
         }
-        if(task.user !== req.userRef){
+        if(task.user.isEqual(req.userRef)){
             throw Error("Task unaccessible")
         }
         await Promise.all(task.attachments.map(async (attachment) => { return await deleteMediaObject(attachment) }))
